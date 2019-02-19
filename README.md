@@ -31,32 +31,30 @@
 - Обновить главную страницу так, чтобы отображать количество вызовов каждого короткого URL ([mockup](readme-assets/counter.png)).
 
 ### Релиз 2:  Валидация URL и обработка ошибок.
-Мы получили отзыв, в котором сказано, что наши короткие ссылки не работают и отправляют пользователей на неправильные  URL.
-We've received some user feedback saying that our short links are broken, sending users to bad URLs.  We've looked into the issue and noticed that users are supplying incomplete URLs.  For example, the user submits "google.com" rather than "http://google.com".  In other words, the problem is with the user input, but it looks like the problem is on our end, and of course, we need to do something about it.
+Мы получили отзыв, в котором сказано, что наши короткие ссылки не работают и отправляют пользователей на неправильные  URL. Мы посмотрели отчет об ошибке и заметили, что пользователи вводят не полные URL. Например, пользователь вводит "google.com" вместо "http://google.com". Другими словами, проблема в пользовательском вводе, но выглядит это так, будто проблема на нашей стороне и конечно нам нужно что-то с этим сделать.
 
-If a user submits an invalid URL, we don't want to provide them with a short URL; instead, we want to alert them to the problem and provide the opportunity to correct the input (see Figure 2).  To accomplish this, we'll add an [Active Record validation][ActiveRecord validations] to our `Url` model.  There are different approaches to determining what constitutes a valid URL.  For our purposes, we'll say that a valid URL begins with "http://" or "https://".
+Если пользователь отправляет невалидный URL, мы не хотим предоставлять ему короткую ссылку; вместо этого его нужно предупредить о проблеме и показать, как можно исправить ввод (см Рис 2). Чтобы сделать это, мы добавим [Mongoose validation][Mongoose validations] к нашей модели `Url`. Можно несколькими способами определить, из чего состоит валидный URL. Для нашей цели, скажем, что валидный URL начинается с "http://" или "https://".
 
-Add an Active Record validation to the `Url` model to validate that a URL begins with "http://" or "https://".
+Добавьте Mongoose validation к модели `Url`, чтобы проверить, что URL начинается с "http://" или "https://".
+
 
 ![error animation](readme-assets/show-error-animation.gif)  
-*Figure 2*.  Alerting users that a URL is invalid.
+*Рис 2*.  Предупреждение пользователя о невалидном URL
 
-As we've learned in [previous challenges][validations intro challenge], when we attempt to save, create, or update an Active Record object, Active Record will first validate the object.  If any validations fail, the object is invalid, and Active Record will not try to write to the database.  But, for each failing validation, Active Record will note the failure in the object's [errors][].  We should leverage our understanding of validations and errors to update the route handler in which we persist `Url` objects.
-
-
-## Conclusion
-Having completed this challenge, we should be familiar with an Active Record object's life cycle events:  validation, save, update, destroy, etc.  We should be able to set up callbacks that execute when one of these events occur.  In this challenge we added a callback that executed before a `Url` object was saved to gave it a short URL.
-
-We should also be able to provide a good user experience when something fails.  For example, in this challenge we built `Url` objects from user input.  But, we had to account for the fact that sometimes users supply invalid input.  We updated our route handler, so that we were able to inform users if something went wrong and provide an opportunity to correct the issue.
+Валидация в Mongoose - это middleware, который срабатывает перед сохранением объекта. Если валидация не пройдена, объект не получится сохранить и ошибки будут содержаться в объекте ValidatorError. У такого объекта есть атрибуты  kind, path, value, и message. В некоторых случаях появляется свойство reason. Необходимо разобраться с тем, как пользоваться валидаторами и что происходит при проверке объекта.
 
 
-[ActiveRecord validations]: http://guides.rubyonrails.org/active_record_validations.html
+## Заключение
+После завершения этого задания, мы должны уметь разбираться с жизненным циклом объекта Mongoose: валидация, сохранение, обновление, удаление и так далее. Мы должны уметь обрабатывать эти действия. В этом задании мы добавили функцию, которая срабатывает перед тем, как объект `Url` сохраняется, чтобы получить короткий URL.
+
+Нам также нужно уметь предоставить хороший интерфейс для пользователей, когда случается ошибка. Например, в этом задании мы создаем объекты  `Url` из ввода пользователя. Но мы должны учесть тот факт, что иногда пользователи вводят некорректные данные. Мы обновили обработчик маршрутов, так что теперь, если что-то пойдет не так, мы уведомим пользователя об ошибке и подскажем, как можно её исправить.
+
+
+[Mongoose validation]: https://mongoosejs.com/docs/validation.html
 [bitly]: http://bitly.com/
-[errors]: http://guides.rubyonrails.org/active_record_validations.html#working-with-validation-errorsactive_record_validations.html#validations-overview-errors
-[HTTP status codes]: http://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+[HTTP status codes]: https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%BA%D0%BE%D0%B4%D0%BE%D0%B2_%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F_HTTP
 [HTTP status cats]: http://httpcats.herokuapp.com/
-[rails guides callbacks]: http://guides.rubyonrails.org/active_record_callbacks.html
-[validations intro challenge]: ../../../active-record-intro-validations-challenge
+[Mongoose queries]: https://mongoosejs.com/docs/queries.html
 [wikipedia 301]: https://ru.wikipedia.org/wiki/HTTP_301
 
 
