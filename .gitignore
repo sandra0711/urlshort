@@ -25,3 +25,6 @@ chromedriver.log
 bin/
 .env
 *.swp
+node_modules
+.idea
+
