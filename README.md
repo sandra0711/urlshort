@@ -1,39 +1,37 @@
 # URL Shortener
 
-## Summary
-We're going to build a [Bitly][] clone.  What does Bitly do?  URLs can be really long, which makes them difficult to share.  Bitly provides a service that creates shorter, friendlier URLs.  When users visit a shortened Bitly URL, the Bitly server responds by telling the browser to redirect to the original, longer URL.
+## Введение
+Мы собираемся создать клон [Bitly][]. Что Bitly делает? URL могут быть очень длинными, из-за чего ими неудобно делиться. Bitly предоставляет сервис, который создает короткие и более удобные URL. Когда пользователь переходит по короткому Bitly URL, сервер отвечает тем, что производит редирект на изначальный, более длинный URL.
 
-Try it.  Click on this Bitly link:  [http://bit.ly/1dKgi4T](http://bit.ly/1dKgi4T).
+Попробуйте. Нажмите на эту ссылку:  [https://bit.ly/2DXRTOG](https://bit.ly/2DXRTOG).
 
-What happened?  If we open the Network tab of the Developer Tools, and visit the Bitly link again, we'll see that the response from the Bitly server has a status of [301][wikipedia 301].  If we look a little deeper and look at the response headers, we'll see that a location header specifies for the browser where to go.
+Что случилось? Если мы откроем вкладку Network в Developer Tools и снова перейдем по Bitly ссылке, мы увидим, что ответ от сервера Bitly имеет статус [301][wikipedia 301]. Если мы чуть углубимся и посмотрим на заголовки ответа, мы заметим, что заголовок location показывает, куда перейти браузеру.
 
-While building this web application, our focus is going to be on events related to the life cycle of an Active Record model.  What happens when when an Active Record model is instantiated, saved, validated, etc.?  We'll be using Active Record [callbacks][rails guides callbacks] around these life cycle events to control our objects and their data.
+Во время разработки данного веб-приложения мы сфокусируемся на маршрутах Express и моделях Mongoose.
 
-
-## Releases
-### Release 0: Build the MVP
+## Релизы
+### Релиз 0: Постройте MVP
 ![mvp animation](readme-assets/mvp-animation.gif)  
-*Figure 1*.  Mockup of URL Shortener application.
+*Рис 1*.  Макет приложения
 
 
-In Figure 1 we have an animation that demonstrates how our application works.  On the homepage is a form where users input a URL.  When the form is submitted, our application persists an object representing the URL.  Objects representing submitted URLs are displayed on the homepage—both the original and shortened URLs.  When a user visits the shortened URL, they are redirected to the original URL.
+На Рис 1 изображена анимация, которая демонстрирует, как наше приложение работает. На главной странице расположена форма, куда пользователь вводит URL. Когда форма отправлена, наше приложение сохраняет объект, представляющий URL. Объекты-URL представлены на главной странице и в первоначальном, и в сокращенном виде. Когда пользователь переходит по короткому  URL, он перенаправляется на первоначальный адрес.
 
-We'll need one resource for our application:  a `Url` model.  Our model should have two attributes:  a long URL and a short URL.  We'll be creating our `Url` objects based on user input.  Users will provide us with the long URL.  We'll need to create the short URL—use a `before_save` callback in the `Url` model.
+Нам будет нужен один ресурс для приложения: модель `Url`. У нашей модели будет два атрибута: длинный и короткий URL. Создавать эти объекты мы будем на основе пользовательского ввода. Пользователи предоставляют длинный URL. Мы должны перед сохранением объекта создавать короткий адрес.
 
-*Note:*  The necessary route handlers have been setup for us, but we need to complete them.
+*Замечание:*  Необходимые маршруты уже прописаны, но мы должны завершить и заполнить их.
 
+### Релиз 1:  Запрос Счётчика для каждого короткого URL
+Пользователи рады нашему сервису по сокращению URL, но они запрашивают дополнительный функционал. Когда они делятся сокращенной ссылкой, им хочется знать, сколько раз этой ссылкой воспользовались.
 
-### Release 1:  Count Requests for each Short URLs
-Users are happy with our URL shortening service, but they have requested an additional feature.  When they share a shortened link, they want to know how many times the shortened link is used.
+Нам надо обновить наше приложение, чтобы получить счетчик, который будет показывать, сколько раз он получает запрос для каждого URL. Чтобы это сделать, нам нужно ...
 
-We need to update our application to maintain a count of how many times it receives a request for each short URL.  To complete this feature, we'll need to ...
+- Обновить базу данных, чтобы следить за количеством визитов каждого URL.
+- Обновить подходящий обработчик маршрута так, чтобы в любой момент, когда вызывается короткий URL, обновлялся счетчик для конкретного URL.
+- Обновить главную страницу так, чтобы отображать количество вызовов каждого короткого URL ([mockup](readme-assets/counter.png)).
 
-- update our database table to keep track of visits for each URL.
-- update the appropriate route handler, so that any time a short URL is requested, the counter for the appropriate `Url` is updated.
-- update the homepage to display the number of times each short URL was requested ([mockup](readme-assets/counter.png)).
-
-
-### Release 2:  Validate URLs and Handle Errors
+### Релиз 2:  Валидация URL и обработка ошибок.
+Мы получили отзыв, в котором сказано, что наши короткие ссылки не работают и отправляют пользователей на неправильные  URL.
 We've received some user feedback saying that our short links are broken, sending users to bad URLs.  We've looked into the issue and noticed that users are supplying incomplete URLs.  For example, the user submits "google.com" rather than "http://google.com".  In other words, the problem is with the user input, but it looks like the problem is on our end, and of course, we need to do something about it.
 
 If a user submits an invalid URL, we don't want to provide them with a short URL; instead, we want to alert them to the problem and provide the opportunity to correct the input (see Figure 2).  To accomplish this, we'll add an [Active Record validation][ActiveRecord validations] to our `Url` model.  There are different approaches to determining what constitutes a valid URL.  For our purposes, we'll say that a valid URL begins with "http://" or "https://".
@@ -59,6 +57,6 @@ We should also be able to provide a good user experience when something fails.  
 [HTTP status cats]: http://httpcats.herokuapp.com/
 [rails guides callbacks]: http://guides.rubyonrails.org/active_record_callbacks.html
 [validations intro challenge]: ../../../active-record-intro-validations-challenge
-[wikipedia 301]: https://en.wikipedia.org/wiki/HTTP_301
+[wikipedia 301]: https://ru.wikipedia.org/wiki/HTTP_301
 
 
