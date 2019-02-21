@@ -50,7 +50,7 @@
 Нам также нужно уметь предоставить хороший интерфейс для пользователей, когда случается ошибка. Например, в этом задании мы создаем объекты  `Url` из ввода пользователя. Но мы должны учесть тот факт, что иногда пользователи вводят некорректные данные. Мы обновили обработчик маршрутов, так что теперь, если что-то пойдет не так, мы уведомим пользователя об ошибке и подскажем, как можно её исправить.
 
 
-[Mongoose validation]: https://mongoosejs.com/docs/validation.html
+[Mongoose validations]: https://mongoosejs.com/docs/validation.html
 [bitly]: http://bitly.com/
 [HTTP status codes]: https://ru.wikipedia.org/wiki/%D0%A1%D0%BF%D0%B8%D1%81%D0%BE%D0%BA_%D0%BA%D0%BE%D0%B4%D0%BE%D0%B2_%D1%81%D0%BE%D1%81%D1%82%D0%BE%D1%8F%D0%BD%D0%B8%D1%8F_HTTP
 [HTTP status cats]: http://httpcats.herokuapp.com/
