@@ -1,19 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
 
-/* GET home page. */
-router.get('/', function(req, res) {
-    // Позволяет создавать короткие  URL
+const router = express.Router();
+
+router.get('/', function (req, res) {
     // Отображает список коротких URL
     res.render('index', { title: 'Url shortener' });
 });
 
-router.post('/urls', function(req, res) {
+router.post('/urls', function (req, res) {
     // Создать новый объект 'Url'
-    // И вернуться обратно на домашнюю страницу
+    // Автоматически создаются короткие  URL
+    // Можно использовать presave в Mongoose
+    // В конце надо вернуться обратно на домашнюю страницу
 });
 
-router.get('/:shortUrl', function(req, res, next) {
+router.get('/:shortUrl', function (req, res, next) {
     // Перейти по короткому к соответствующему "длинному" URL
 });
 
