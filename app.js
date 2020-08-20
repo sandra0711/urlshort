@@ -1,24 +1,31 @@
 const createError = require('http-errors');
 const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-
-const indexRouter = require('./routes/index');
 
 const app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
-app.use('/', indexRouter);
+app.get('/', function (req, res) {
+  // Отображает список коротких URL
+  res.render('index', { title: 'Url shortener' });
+});
+
+app.post('/urls', function (req, res) {
+  // Создать новый объект 'Url'
+  // Автоматически создаются короткие  URL
+  // Можно использовать presave в Mongoose
+  // В конце надо вернуться обратно на домашнюю страницу
+});
+
+app.get('/:shortUrl', function (req, res, next) {
+  // Перейти по короткому к соответствующему "длинному" URL
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
