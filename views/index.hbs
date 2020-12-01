@@ -1,4 +1,15 @@
 <div class="container">
-    <h1>{{title}}</h1>
-    <p>Welcome to {{title}}</p>
+  <h1>{{title}}</h1>
+  <p>Welcome to {{title}}</p>
+</div>
+<div>
+  <form action="/urls" method="post">
+    <input type="text" name="longerUrl">
+    <input type="submit" value="Отправить">
+  </form>
+</div>
+<div>
+  {{#each urlsLong}}
+    <p><a href="/{{this.urlShort}}">{{this.urlShort}}, количество посещений: {{this.count}}</a></p>
+  {{/each}}
 </div>
