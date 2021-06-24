@@ -9,7 +9,7 @@
   </form>
 </div>
 <div>
-  {{#each urlsLong}}
-    <p><a href="/{{this.urlShort}}">{{this.urlShort}}, количество посещений: {{this.count}}</a></p>
+  {{#each urls}}
+    <p><a href="/{{this.urlShort}}">{{this.urlLong}}, {{this.urlShort}},  количество посещений: {{this.count}}</a></p>
   {{/each}}
 </div>
